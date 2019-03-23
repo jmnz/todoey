@@ -13,6 +13,7 @@
 		A32C6BC022343F6B00AD9926 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A32C6BBF22343F6B00AD9926 /* Assets.xcassets */; };
 		A32C6BC322343F6B00AD9926 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A32C6BC122343F6B00AD9926 /* LaunchScreen.storyboard */; };
 		A32C6BF32239F96100AD9926 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A32C6BF12239F96100AD9926 /* Model.xcdatamodeld */; };
+		A3F9B21F224525AF0087D731 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3F9B21E224525AF0087D731 /* CategoryViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		A32C6BC222343F6B00AD9926 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A32C6BC422343F6B00AD9926 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A32C6BF22239F96100AD9926 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		A3F9B21E224525AF0087D731 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +79,7 @@
 		A32C6BCD2238AEFA00AD9926 /* controllers */ = {
 			isa = PBXGroup;
 			children = (
+				A3F9B21E224525AF0087D731 /* CategoryViewController.swift */,
 				A32C6BBA22343F6900AD9926 /* TodoListViewController.swift */,
 			);
 			path = controllers;
@@ -170,6 +173,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A3F9B21F224525AF0087D731 /* CategoryViewController.swift in Sources */,
 				A32C6BBB22343F6900AD9926 /* TodoListViewController.swift in Sources */,
 				A32C6BB922343F6900AD9926 /* AppDelegate.swift in Sources */,
 				A32C6BF32239F96100AD9926 /* Model.xcdatamodeld in Sources */,
