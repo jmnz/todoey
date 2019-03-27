@@ -7,13 +7,13 @@
 //
 
 import UIKit
-import CoreData
+import RealmSwift
 
 
 class CategoryViewController: UITableViewController {
     
-    var categoryArray = [Category]()
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    let realm = try? Realm()
+    var categoryArray : Results<Category>?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,21 +22,23 @@ class CategoryViewController: UITableViewController {
     // MARK: - Table View Data Source
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categoryArray.count
+        return categoryArray?.count ?? 1
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "category", for: indexPath)
-        cell.textLabel?.text = categoryArray[indexPath.row].name
+        cell.textLabel?.text = categoryArray?[indexPath.row].name ?? "No categories added yet"
         return cell
     }
     //MARK: - Data Manipulation Methods
     
-    func saveData() {
-        try? context.save()
+    func saveData(category:Category) {
+        try? realm?.write {
+            realm?.add(category)
+        }
         tableView.reloadData()
     }
-    func loadCategories(with request: NSFetchRequest<Category> = Category.fetchRequest()) {
-        categoryArray = try! context.fetch(request)
+    func loadCategories() {
+        categoryArray = realm?.objects(Category.self)
         tableView.reloadData()
     }
     
@@ -44,10 +46,9 @@ class CategoryViewController: UITableViewController {
         var textfield = UITextField()
         let alert = UIAlertController(title: "Add new Category", message: "", preferredStyle: .alert)
         let action = UIAlertAction(title: "add category", style: .default) { (action) in
-            let newCategory = Category(context: self.context)
+            let newCategory = Category()
             newCategory.name = textfield.text ?? ""
-            self.categoryArray.append(newCategory)
-            self.saveData()
+            self.saveData(category: newCategory)
         }
         alert.addTextField { (AlertTextField) in
             AlertTextField.placeholder = "new category"
@@ -66,7 +67,7 @@ class CategoryViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationVC = segue.destination as! TodoListViewController
         if let indexpath = tableView.indexPathForSelectedRow {
-            destinationVC.selectedCategory = self.categoryArray[indexpath.row]
+            destinationVC.selectedCategory = self.categoryArray?[indexpath.row]
         }
     }
     
