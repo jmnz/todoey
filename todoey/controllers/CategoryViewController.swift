@@ -10,14 +10,15 @@ import UIKit
 import RealmSwift
 
 
-class CategoryViewController: UITableViewController {
+class CategoryViewController: SwipeTableViewController {
     
-    let realm = try? Realm()
+    let realm = try! Realm()
     var categoryArray : Results<Category>?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         loadCategories()
+        tableView.rowHeight = 80.0
     }
     // MARK: - Table View Data Source
     
@@ -25,21 +26,31 @@ class CategoryViewController: UITableViewController {
         return categoryArray?.count ?? 1
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "category", for: indexPath)
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         cell.textLabel?.text = categoryArray?[indexPath.row].name ?? "No categories added yet"
         return cell
     }
     //MARK: - Data Manipulation Methods
     
     func saveData(category:Category) {
-        try? realm?.write {
-            realm?.add(category)
+        try? realm.write {
+            realm.add(category)
         }
         tableView.reloadData()
     }
     func loadCategories() {
-        categoryArray = realm?.objects(Category.self)
+        categoryArray = realm.objects(Category.self)
         tableView.reloadData()
+    }
+    
+    // MARK:- delete data from swipe
+    
+    override func updateModel(at indexPath: IndexPath) {
+        if let categoryForDeletion = self.categoryArray?[indexPath.row] {
+            try? self.realm.write {
+                self.realm.delete(categoryForDeletion)
+            }
+        }
     }
     
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
@@ -71,7 +82,6 @@ class CategoryViewController: UITableViewController {
         }
     }
     
-
-    
-    
 }
+
+
