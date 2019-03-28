@@ -8,8 +8,10 @@
 
 import UIKit
 import RealmSwift
+import ChameleonFramework
 class TodoListViewController: SwipeTableViewController {
     
+    @IBOutlet weak var searchBar: UISearchBar!
     let realm = try! Realm()
     var todoTasks : Results<TodoTask>?
     var selectedCategory : Category? {
@@ -21,6 +23,30 @@ class TodoListViewController: SwipeTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.rowHeight = 80.0
+        tableView.separatorStyle = .none
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        title = selectedCategory!.name
+        guard let colorHex = selectedCategory?.color else {fatalError("category not assigned")}
+        updateNavBar(with: colorHex)
+        
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        guard let originalColor = HexColor("1D9BF6") else {fatalError()}
+        updateNavBar(with: originalColor.hexValue())
+        
+    }
+    
+    //MARK:- nav bar color setup methods
+    
+    func updateNavBar(with colorHexCode: String) {
+        guard let navBar = navigationController?.navigationBar else {fatalError("navigation ontroller does not exist.")}
+        navBar.barTintColor = HexColor(colorHexCode)
+        navBar.tintColor = ContrastColorOf(navBar.barTintColor!, returnFlat: true)
+        searchBar.barTintColor = HexColor(colorHexCode)
+        navBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor : ContrastColorOf(navBar.barTintColor!, returnFlat: true)]
     }
     
     //MARK: - TableView DataSource Methods
@@ -34,6 +60,8 @@ class TodoListViewController: SwipeTableViewController {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         if let task = todoTasks?[indexPath.row] {
             cell.textLabel?.text = task.title
+            cell.backgroundColor = HexColor(selectedCategory!.color)?.darken(byPercentage: CGFloat(indexPath.row)/CGFloat(todoTasks!.count))
+            cell.textLabel?.textColor = ContrastColorOf(cell.backgroundColor!, returnFlat: true)
             cell.accessoryType = task.done ? .checkmark : .none
         } else {
             cell.textLabel?.text = "no items yet"
